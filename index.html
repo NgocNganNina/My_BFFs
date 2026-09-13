@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Stars in My Galaxy ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap');
+
+        :root {
+            --glow-color: rgba(186, 149, 235, 0.7);
+            --card-bg: rgba(25, 20, 40, 0.6);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- Starry Background Animation --- */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: drift 100s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes drift {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+
+        /* --- Shooting Stars Animation --- */
+        .shooting-stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, rgba(186, 149, 235, 0.85) 35%, rgba(138, 79, 255, 0.3) 75%, transparent);
+            border-radius: 999px;
+            filter: drop-shadow(0 0 6px rgba(210, 180, 255, 0.95)) drop-shadow(0 0 12px rgba(186, 149, 235, 0.6));
+            transform-origin: left center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glowing meteor core */
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 5px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 6px 2px #ffffff,
+                0 0 12px 4px rgba(186, 149, 235, 0.9),
+                0 0 20px 6px rgba(138, 79, 255, 0.7);
+        }
+
+        /* Star sparkle on the head */
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 9px;
+            height: 9px;
+            background: radial-gradient(circle, #ffffff 15%, rgba(255, 255, 255, 0.9) 35%, transparent 70%);
+            clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+        }
+
+        /* Trajectory Keyframes */
+        @keyframes shoot-soft {
+            0% {
+                transform: rotate(-32deg) translateX(0) scaleX(0);
+                opacity: 0;
+            }
+            1% {
+                opacity: 0.6;
+            }
+            4% {
+                transform: rotate(-32deg) translateX(-50px) scaleX(0.7);
+                opacity: 1;
+            }
+            15% {
+                transform: rotate(-32deg) translateX(-380px) scaleX(1);
+                opacity: 1;
+            }
+            24% {
+                transform: rotate(-32deg) translateX(-780px) scaleX(0.4);
+                opacity: 0.8;
+            }
+            28% {
+                transform: rotate(-32deg) translateX(-950px) scaleX(0);
+                opacity: 0;
+            }
+            100% {
+                transform: rotate(-32deg) translateX(-950px) scaleX(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shoot-medium {
+            0% {
+                transform: rotate(-38deg) translateX(0) scaleX(0);
+                opacity: 0;
+            }
+            1% {
+                opacity: 0.6;
+            }
+            4% {
+                transform: rotate(-38deg) translateX(-60px) scaleX(0.7);
+                opacity: 1;
+            }
+            15% {
+                transform: rotate(-38deg) translateX(-420px) scaleX(1);
+                opacity: 1;
+            }
+            24% {
+                transform: rotate(-38deg) translateX(-850px) scaleX(0.4);
+                opacity: 0.8;
+            }
+            28% {
+                transform: rotate(-38deg) translateX(-1050px) scaleX(0);
+                opacity: 0;
+            }
+            100% {
+                transform: rotate(-38deg) translateX(-1050px) scaleX(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shoot-steep {
+            0% {
+                transform: rotate(-46deg) translateX(0) scaleX(0);
+                opacity: 0;
+            }
+            1% {
+                opacity: 0.6;
+            }
+            4% {
+                transform: rotate(-46deg) translateX(-60px) scaleX(0.7);
+                opacity: 1;
+            }
+            15% {
+                transform: rotate(-46deg) translateX(-450px) scaleX(1);
+                opacity: 1;
+            }
+            24% {
+                transform: rotate(-46deg) translateX(-900px) scaleX(0.4);
+                opacity: 0.8;
+            }
+            28% {
+                transform: rotate(-46deg) translateX(-1100px) scaleX(0);
+                opacity: 0;
+            }
+            100% {
+                transform: rotate(-46deg) translateX(-1100px) scaleX(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shoot-wide {
+            0% {
+                transform: rotate(-26deg) translateX(0) scaleX(0);
+                opacity: 0;
+            }
+            1% {
+                opacity: 0.6;
+            }
+            4% {
+                transform: rotate(-26deg) translateX(-50px) scaleX(0.7);
+                opacity: 1;
+            }
+            15% {
+                transform: rotate(-26deg) translateX(-360px) scaleX(1);
+                opacity: 1;
+            }
+            24% {
+                transform: rotate(-26deg) translateX(-720px) scaleX(0.4);
+                opacity: 0.8;
+            }
+            28% {
+                transform: rotate(-26deg) translateX(-900px) scaleX(0);
+                opacity: 0;
+            }
+            100% {
+                transform: rotate(-26deg) translateX(-900px) scaleX(0);
+                opacity: 0;
+            }
+        }
+
+        /* One-shot keyframes for interactive click stars */
+        @keyframes shoot-once {
+            0% {
+                transform: rotate(-38deg) translateX(0) scaleX(0);
+                opacity: 0;
+            }
+            8% {
+                transform: rotate(-38deg) translateX(-80px) scaleX(0.8);
+                opacity: 1;
+            }
+            50% {
+                transform: rotate(-38deg) translateX(-450px) scaleX(1);
+                opacity: 1;
+            }
+            85% {
+                transform: rotate(-38deg) translateX(-850px) scaleX(0.4);
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(-38deg) translateX(-1050px) scaleX(0);
+                opacity: 0;
+            }
+        }
+
+        /* Individual stars: varied positions, lengths, delays, and durations */
+        .star-1 {
+            top: 6%;
+            left: 85%;
+            width: 170px;
+            animation: shoot-medium 11s linear infinite;
+            animation-delay: 0s;
+        }
+
+        .star-2 {
+            top: 2%;
+            left: 65%;
+            width: 140px;
+            animation: shoot-steep 12.5s linear infinite;
+            animation-delay: 2.2s;
+        }
+
+        .star-3 {
+            top: 18%;
+            left: 95%;
+            width: 200px;
+            animation: shoot-soft 10s linear infinite;
+            animation-delay: 4.5s;
+        }
+
+        .star-4 {
+            top: 28%;
+            left: 80%;
+            width: 150px;
+            animation: shoot-wide 13s linear infinite;
+            animation-delay: 6.8s;
+        }
+
+        .star-5 {
+            top: 10%;
+            left: 48%;
+            width: 185px;
+            animation: shoot-medium 11.5s linear infinite;
+            animation-delay: 8.5s;
+        }
+
+        .star-6 {
+            top: 38%;
+            left: 92%;
+            width: 160px;
+            animation: shoot-soft 14s linear infinite;
+            animation-delay: 10.2s;
+        }
+
+        .star-7 {
+            top: 4%;
+            left: 30%;
+            width: 130px;
+            animation: shoot-steep 12s linear infinite;
+            animation-delay: 5.5s;
+        }
+
+        .star-8 {
+            top: -20px;
+            left: 98%;
+            width: 220px;
+            animation: shoot-medium 10.5s linear infinite;
+            animation-delay: 1.2s;
+        }
+
+        /* --- Layout & Typography --- */
+        header, .poem-container, .container, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 0 15px var(--glow-color);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #d4c4e9;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* --- Poem Section --- */
+        .poem-container {
+            text-align: center;
+            background: rgba(25, 20, 40, 0.4);
+            padding: 30px 40px;
+            border-radius: 15px;
+            border: 1px dashed rgba(186, 149, 235, 0.5);
+            max-width: 700px;
+            margin: 0 20px 40px 20px;
+            box-shadow: 0 0 20px rgba(186, 149, 235, 0.15);
+            backdrop-filter: blur(5px);
+        }
+
+        .poem {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin: 15px 0;
+            line-height: 1.8;
+            color: #f0e6ff;
+        }
+
+        .poem-divider {
+            width: 50px;
+            height: 2px;
+            background: var(--glow-color);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        /* --- Friend Cards --- */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1000px;
+            padding: 0 20px 50px 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px 0 var(--glow-color);
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px var(--glow-color);
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: #f0e6ff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .badge {
+            text-align: center;
+            display: inline-block;
+            background: linear-gradient(45deg, #6b4c9a, #4a3b72);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0 auto 20px auto;
+            display: table;
+        }
+
+        .lang-section {
+            margin-bottom: 20px;
+        }
+
+        .lang-title {
+            font-size: 0.9rem;
+            color: #a395c3;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 0 0 15px 0;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <!-- Shooting Stars Container -->
+    <div class="shooting-stars-container" aria-hidden="true">
+        <div class="shooting-star star-1"></div>
+        <div class="shooting-star star-2"></div>
+        <div class="shooting-star star-3"></div>
+        <div class="shooting-star star-4"></div>
+        <div class="shooting-star star-5"></div>
+        <div class="shooting-star star-6"></div>
+        <div class="shooting-star star-7"></div>
+        <div class="shooting-star star-8"></div>
+    </div>
+
+    <header>
+        <h1>The Stars in My Galaxy 🌌</h1>
+        <div class="subtitle">
+            <p>A little appreciation post for my best friends.</p>
+            <p>Một bài viết nhỏ tri ân những người bạn thân nhất của mình.</p>
+        </div>
+    </header>
+
+    <!-- Poem Section -->
+    <div class="poem-container">
+        <div class="lang-title" style="border:none; text-align:center;">English</div>
+        <div class="poem">
+            Across the oceans, through the years,<br>
+            Through magic rocks and happy tears.<br>
+            Like stars that glow within the night,<br>
+            Our friendship burns forever bright.<br>
+            Though distance parts us, far or near,<br>
+            You are the galaxy I hold so dear.
+        </div>
+        
+        <div class="poem-divider"></div>
+        
+        <div class="lang-title" style="border:none; text-align:center;">Tiếng Việt</div>
+        <div class="poem">
+            Vượt ngàn đại dương, trôi theo năm tháng,<br>
+            Từ viên đá tuổi thơ đến nụ cười trong sáng.<br>
+            Như những vì sao lấp lánh giữa đêm đen,<br>
+            Tình bạn chúng mình mãi rực sáng đan xen.<br>
+            Dù khoảng cách chia xa, hay dẫu gần ngay trước mắt,<br>
+            Các bạn mãi là dải ngân hà mình trân quý nhất.
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Cherry's Card -->
+        <div class="card">
+            <!-- Changed to .jpg -->
+            <img src="Cherry.jpg" alt="Nguyễn Phước Định An Nhiên Cherry" class="profile-img">
+            <h2>Cherry</h2>
+            <div class="badge">Most Valuable Friend 🌟</div>
+            
+            <div class="lang-section">
+                <div class="lang-title">English</div>
+                <p>
+                    -	Cherry is the closest friend I have ever had. We shared so many moments studying English together, turning lessons into memories. You were always like a mom to me, always reassuring me. She always helps me overcome my problems. Now that she has to move away to Australia, leaving a quiet space here, but a permanent place in my heart. Even though you are in Australia, you always hear my whining and complaints. I sometimes feel very guilty because I think I annoy you and waste your time. Anyways, I wish you luck in all your undertakings!!!
+                </p>
+            </div>
+
+            <div class="lang-section">
+                <div class="lang-title">Tiếng Việt</div>
+                <p>
+                    Người bạn thân trân quý và gắn bó nhất của mình, Nguyễn Phước Định An Nhiên. Mình mong cậu sẽ luôn gặp nhiều may mắn và hãy thường xuyên về thăm mình nhé! Chúng ta đã cùng nhau học tiếng Anh, nhưng giờ cậu lại phải sang Úc rồi. Mình sẽ nhớ cậu nhiều lắm! Cherry có nhớ hồi mình chia sẽ secret cho nhau hong. Những hồi cãi lộn với nhau, mình thực sự cảm thấy rất buồn. Giờ thì Che đi nước ngoài rồi thì Rabbit cảm thấy rất hối hận!! Thật là nhìu kỷ niệm giờ đã nằm lại trong quá khứ. Bạn cũng giúp mình giống như một người mẹ hihi:)))
+                </p>
+            </div>
+        </div>
+
+        <!-- Nấm's Card -->
+        <div class="card">
+            <!-- Changed to .jpg -->
+            <img src="Nấm.jpg" alt="Nguyễn Dương Tố Ny Nấm" class="profile-img">
+            <h2>Nấm</h2>
+            <div class="badge">Childhood Bestie 💫</div>
+            
+            <div class="lang-section">
+                <div class="lang-title">English</div>
+                <p>
+                    Nấm is my wonderful childhood friend with whom I share a treasure chest of whimsical memories. From collecting snails (ewwwww!) to gathering random rocks and pretending they were magical elements with mystical powers—every moment was pure joy. I remember going to school, and everybody thought we were sisters. Sometimes we fight a lot, but mainly because of silly things. But truly in those fights and we don't talk to each other, I still miss you a lot!! Thanks for being here with me!!!               		</p>
+            </div>
+
+            <div class="lang-section">
+                <div class="lang-title">Tiếng Việt</div>
+                <p>
+                    Đối với chị, thì Nấm như là một đứa em của chị. Nấm là bạn thân nhất và là bạn chị có nhiều kỷ niệm nhất. Nhớ hồi đi lượm những cục đá mà nghĩ như cục có nhiều hệ không? Nhớ những hồi đi lượm ốc sên không? Nhớ những hồi chơi “hổ ngủ” và “kít ba chữ” không? Nhớ những hồi có mèo Moon, Candy và Gik không? Nhớ những thời đi hóng drama không? Nhớ hồi lần đầu tiên Nấm bước vào nhà chị không? Đó là hồi Nấm 4 tuổi! Nhiều kỷ niệm thơ ấu giờ sẽ nằm lại trong dĩ vãng!! Nấm rất cute, và chị hy vọng khi lớn lên, chúng mình vẫn sẽ là bạn thân nhất của nhau!!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Made with love across the universe 💜 
+    </footer>
+
+    <!-- Interactive Shooting Star Script -->
+    <script>
+        // Make a wish: clicking or tapping anywhere spawns a shooting star!
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('a, button')) return;
+
+            const container = document.querySelector('.shooting-stars-container');
+            if (!container) return;
+
+            const star = document.createElement('div');
+            star.className = 'shooting-star dynamic-star';
+
+            // Start near click coordinates
+            star.style.left = e.clientX + 'px';
+            star.style.top = e.clientY + 'px';
+            star.style.width = (Math.floor(Math.random() * 60) + 160) + 'px';
+            star.style.animation = 'shoot-once 1.8s ease-out forwards';
+
+            star.addEventListener('animationend', function() {
+                star.remove();
+            });
+
+            container.appendChild(star);
+        });
+    </script>
+</body>
+</html>
